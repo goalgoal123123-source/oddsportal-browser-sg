@@ -7,8 +7,10 @@ PORT="${PORT:-8080}"
 VNC_PASS="${VNC_PASSWORD:-changeme}"
 
 mkdir -p ~/.vnc
-printf '%s' "$VNC_PASS" | vncpasswd -f > ~/.vnc/passwd
+# x11vnc's -storepasswd reliably writes the VNC passwd file format on Debian
+x11vnc -storepasswd "$VNC_PASS" ~/.vnc/passwd >/dev/null
 chmod 600 ~/.vnc/passwd
+ls -l ~/.vnc/passwd
 
 export DISPLAY=:99
 Xvnc :99 -geometry 1366x768 -depth 24 -rfbauth ~/.vnc/passwd &
