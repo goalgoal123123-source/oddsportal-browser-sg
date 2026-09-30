@@ -28,4 +28,4 @@ chromium --display=:99 --no-sandbox --disable-dev-shm-usage --disable-gpu \
   "https://www.oddsportal.com/" \
   >/tmp/chromium.log 2>&1 &
 
-exec websockify --web /usr/share/novnc/ "$PORT" 127.0.0.1:5900
+exec websockify --web /usr/share/novnc/ "$PORT" 127.0.0.1:5999
