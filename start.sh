@@ -13,7 +13,10 @@ chmod 600 ~/.vnc/passwd
 ls -l ~/.vnc/passwd
 
 export DISPLAY=:99
-Xvnc :99 -geometry 1366x768 -depth 24 -rfbauth ~/.vnc/passwd &
+# Disable host blacklisting: websockify always connects from 127.0.0.1, so a
+# single stray probe must never lock out all VNC clients.
+Xvnc :99 -geometry 1366x768 -depth 24 -rfbauth ~/.vnc/passwd \
+  -BlacklistThreshold 1000000 -BlacklistTimeout 1 &
 sleep 2
 openbox &
 sleep 1
