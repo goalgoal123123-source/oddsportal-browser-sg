@@ -13,6 +13,9 @@ chmod 600 ~/.vnc/passwd
 ls -l ~/.vnc/passwd
 
 export DISPLAY=:99
+# Clear stale X lock files: on container restart (not redeploy) /tmp persists,
+# and a leftover lock makes Xvnc refuse to start ("Server is already active").
+rm -f /tmp/.X99-lock /tmp/.X11-unix/X99
 # Disable host blacklisting: websockify always connects from 127.0.0.1, so a
 # single stray probe must never lock out all VNC clients.
 Xvnc :99 -geometry 1366x768 -depth 24 -rfbauth ~/.vnc/passwd \
