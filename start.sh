@@ -22,4 +22,12 @@ chromium --display=:99 --no-sandbox --disable-dev-shm-usage --disable-gpu \
   "https://www.oddsportal.com/" \
   >/tmp/chromium.log 2>&1 &
 
-exec websockify --web /usr/share/novnc/ "$PORT" localhost:5900
+# Diagnostics: log listeners + key processes every 30s (goes to Render logs)
+(while true; do
+  echo "=== diag $(date -u +%H:%M:%S) ==="
+  (ss -ltn 2>/dev/null || netstat -ltn 2>/dev/null) | grep -E ':(5900|10000)' || echo "no 5900/10000 listener!"
+  ps aux | grep -E 'x11vnc|Xvfb|chromium|websockify' | grep -v grep | awk '{print $11, $12, $13}' | head -8
+  sleep 30
+done) &
+
+exec websockify --web /usr/share/novnc/ "$PORT" 127.0.0.1:5900
